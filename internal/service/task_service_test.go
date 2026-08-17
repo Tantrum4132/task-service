@@ -57,8 +57,6 @@ func TestTaskService_UpdateTask_AccessControl(t *testing.T) {
 				memberRepo.EXPECT().
 					GetMemberRole(gomock.Any(), gomock.Any(), int64(1), int64(20)).
 					Return(model.TeamRoleMember, nil)
-
-				// Кэш здесь инвалидироваться не должен, ожиданий нет.
 			},
 			expectedErr: service.ErrPermissionDenied,
 		},
@@ -119,7 +117,6 @@ func TestTaskService_UpdateTask_AccessControl(t *testing.T) {
 			transactorMock := mocks.NewMockTransactor(ctrl)
 			cacheInvalidatorMock := mocks.NewMockTaskCacheInvalidator(ctrl)
 
-			// Передаем мок инвалидатора внутрь тест-кейса
 			tt.setupMock(
 				taskRepoMock,
 				teamMemberRepoMock,
@@ -132,7 +129,7 @@ func TestTaskService_UpdateTask_AccessControl(t *testing.T) {
 				taskRepoMock,
 				teamMemberRepoMock,
 				taskHistoryRepoMock,
-				nil, // taskCommentRepo
+				nil,
 				transactorMock,
 				cacheInvalidatorMock,
 				zap.NewNop(),

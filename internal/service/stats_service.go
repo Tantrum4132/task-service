@@ -32,7 +32,6 @@ func NewStatsService(
 }
 
 func (s *statsService) GetTeamStats(ctx context.Context, userID, teamID int64) (*dto.TaskStatsResponse, error) {
-	// 1. Проверка прав: доступ только у owner или admin
 	role, err := s.teamMemberRepo.GetMemberRole(ctx, nil, teamID, userID)
 	if err != nil {
 		if errors.Is(err, repository.ErrMemberNotFound) {
@@ -45,7 +44,6 @@ func (s *statsService) GetTeamStats(ctx context.Context, userID, teamID int64) (
 		return nil, ErrPermissionDenied
 	}
 
-	// 2. Вызов слоя данных для выполнения SQL-запроса отчета
 	rawStats, err := s.statsRepo.GetTeamStats(ctx, teamID)
 	if err != nil {
 		if errors.Is(err, repository.ErrTeamNotFound) {
@@ -54,7 +52,6 @@ func (s *statsService) GetTeamStats(ctx context.Context, userID, teamID int64) (
 		return nil, fmt.Errorf("get team stats repo: %w", err)
 	}
 
-	// 3. Формирование DTO
 	topAssignees := make([]dto.TopAssignee, len(rawStats.TopAssignees))
 	for i, ta := range rawStats.TopAssignees {
 		topAssignees[i] = dto.TopAssignee{

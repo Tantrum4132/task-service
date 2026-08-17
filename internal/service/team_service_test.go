@@ -90,7 +90,7 @@ func TestTeamService_InviteMember(t *testing.T) {
 				teamMemberRepoMock,
 				userRepoMock,
 				transactorMock,
-				nil, // db
+				nil,
 				zap.NewNop(),
 			)
 

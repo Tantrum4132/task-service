@@ -22,7 +22,6 @@ type taskCommentRepository struct {
 	db *sql.DB
 }
 
-// NewTaskCommentRepository создает новый экземпляр репозитория комментариев.
 func NewTaskCommentRepository(db *sql.DB) repository.TaskCommentRepository {
 	return &taskCommentRepository{
 		db: db,
@@ -36,7 +35,6 @@ func (r *taskCommentRepository) getExec(exec repository.DBEngine) repository.DBE
 	return r.db
 }
 
-// CreateComment создает новый комментарий в БД в рамках переданного exec (DBEngine).
 func (r *taskCommentRepository) CreateComment(ctx context.Context, exec repository.DBEngine, comment *model.TaskComment) error {
 	if comment == nil {
 		return errors.New("comment cannot be nil")
@@ -70,7 +68,6 @@ func (r *taskCommentRepository) CreateComment(ctx context.Context, exec reposito
 	return nil
 }
 
-// GetCommentByID возвращает комментарий по его ID.
 func (r *taskCommentRepository) GetCommentByID(ctx context.Context, exec repository.DBEngine, id int64) (*model.TaskComment, error) {
 	query := `
 		SELECT id, task_id, user_id, content, created_at
@@ -97,7 +94,6 @@ func (r *taskCommentRepository) GetCommentByID(ctx context.Context, exec reposit
 	return &comment, nil
 }
 
-// ListCommentsByTaskID возвращает список комментариев к задаче.
 func (r *taskCommentRepository) ListCommentsByTaskID(ctx context.Context, exec repository.DBEngine, taskID int64) ([]model.TaskComment, error) {
 	query := `
 		SELECT id, task_id, user_id, content, created_at
@@ -129,7 +125,6 @@ func (r *taskCommentRepository) ListCommentsByTaskID(ctx context.Context, exec r
 	return comments, nil
 }
 
-// DeleteComment удаляет комментарий по ID.
 func (r *taskCommentRepository) DeleteComment(ctx context.Context, exec repository.DBEngine, id int64) error {
 	query := `DELETE FROM task_comments WHERE id = ?`
 	runner := r.getExec(exec)

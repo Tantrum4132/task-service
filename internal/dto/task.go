@@ -28,7 +28,7 @@ type UpdateTaskRequest struct {
 	Description *string `json:"description,omitempty" validate:"omitempty,max=5000"`
 	Status      *string `json:"status,omitempty" validate:"omitempty,oneof=todo in_progress done"`
 	AssigneeID  *int64  `json:"assignee_id,omitempty" validate:"omitempty,gt=0"`
-	Version     int     `json:"version" validate:"required,gt=0"` // Обязательно для оптимистической блокировки
+	Version     int     `json:"version" validate:"required,gt=0"`
 }
 
 type TaskFilterQuery struct {

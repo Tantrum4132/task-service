@@ -14,12 +14,10 @@ type statsRepository struct {
 	db *sql.DB
 }
 
-// NewStatsRepository создает экземпляр репозитория статистики.
 func NewStatsRepository(db *sql.DB) repository.StatsRepository {
 	return &statsRepository{db: db}
 }
 
-// GetTeamStats возвращает статистику по команде за один CTE-запрос без N+1.
 func (r *statsRepository) GetTeamStats(ctx context.Context, teamID int64) (*model.TeamStats, error) {
 	const query = `
 WITH team_tasks AS (
@@ -97,8 +95,6 @@ CROSS JOIN top_assignees_json taj;
 		rawTopAssignees []byte
 	)
 
-	// Так как запрос всегда гарантированно возвращает ровно 1 строку,
-	// используем QueryRowContext вместо цикла по rows.Next()
 	err := r.db.QueryRowContext(ctx, query, teamID).Scan(
 		&todoCount,
 		&inProgressCount,

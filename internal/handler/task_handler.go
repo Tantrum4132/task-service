@@ -13,7 +13,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// TaskHandler обрабатывает HTTP-запросы для работы с задачами, комментариями, историей и аналитикой.
 type TaskHandler struct {
 	taskService  service.TaskService
 	statsService service.StatsService
@@ -21,7 +20,6 @@ type TaskHandler struct {
 	logger       *zap.Logger
 }
 
-// NewTaskHandler создает новый экземпляр TaskHandler.
 func NewTaskHandler(
 	taskService service.TaskService,
 	statsService service.StatsService,
@@ -36,7 +34,6 @@ func NewTaskHandler(
 	}
 }
 
-// RegisterRoutes регистрирует эндпоинты контроллера в роутере Gin.
 func (h *TaskHandler) RegisterRoutes(r *gin.RouterGroup) {
 	tasks := r.Group("/tasks")
 	{
@@ -439,7 +436,6 @@ func (h *TaskHandler) GetTeamStats(c *gin.Context) {
 	c.JSON(http.StatusOK, stats)
 }
 
-// handleServiceError маппит ошибки сервисного слоя в соответствующие HTTP статус-коды Gin.
 func (h *TaskHandler) handleServiceError(c *gin.Context, err error) {
 	switch {
 	case errors.Is(err, service.ErrPermissionDenied):

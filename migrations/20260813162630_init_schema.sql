@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS team_members (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Таблица задач
 CREATE TABLE IF NOT EXISTS tasks (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     team_id BIGINT NOT NULL,
@@ -37,14 +36,11 @@ CREATE TABLE IF NOT EXISTS tasks (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     closed_at DATETIME NULL DEFAULT NULL,
     version INT NOT NULL DEFAULT 1,
-    
-    -- Внешние ключи
     FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (assignee_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- Таблицы истории и комментариев
 CREATE TABLE IF NOT EXISTS task_history (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     task_id BIGINT NOT NULL,

@@ -67,7 +67,6 @@ func TestAuthService_Login(t *testing.T) {
 					FindByEmail(gomock.Any(), gomock.Any(), "unknown@example.com").
 					Return(nil, repository.ErrUserNotFound)
 			},
-			// Сервис маскирует ErrUserNotFound в ErrInvalidCredentials
 			expectedErr: service.ErrInvalidCredentials,
 			checkResult: func(t *testing.T, resp *dto.AuthResponse, err error) {
 				assert.Nil(t, resp)

@@ -63,7 +63,6 @@ func (s *authService) Register(ctx context.Context, req dto.RegisterRequest) (*m
 		CreatedAt:    time.Now().UTC(),
 	}
 
-	// Полагаемся на уникальный constraint в БД, чтобы избежать состояния гонки
 	if err := s.userRepo.Create(ctx, s.db, user); err != nil {
 		if errors.Is(err, repository.ErrEmailAlreadyExists) {
 			return nil, ErrUserAlreadyExists

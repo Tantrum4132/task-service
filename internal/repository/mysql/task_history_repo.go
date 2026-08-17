@@ -16,7 +16,6 @@ type taskHistoryRepository struct {
 	db *sql.DB
 }
 
-// NewTaskHistoryRepository создает новый экземпляр репозитория истории задач
 func NewTaskHistoryRepository(db *sql.DB) repository.TaskHistoryRepository {
 	return &taskHistoryRepository{db: db}
 }
@@ -28,14 +27,11 @@ func (r *taskHistoryRepository) getExec(exec repository.DBEngine) repository.DBE
 	return r.db
 }
 
-// CreateTaskHistory записывает новое изменение задачи в БД.
-// Принимает DBEngine (позволяет выполнять в рамках транзакции или через обычное подключение).
 func (r *taskHistoryRepository) CreateTaskHistory(ctx context.Context, exec repository.DBEngine, history *model.TaskHistory) error {
 	if history == nil {
 		return errors.New("task history cannot be nil")
 	}
 
-	// Инициализация времени — ответственность Service layer
 	if history.CreatedAt.IsZero() {
 		return repository.ErrInvalidTaskHistoryPayload
 	}
@@ -69,14 +65,11 @@ func (r *taskHistoryRepository) CreateTaskHistory(ctx context.Context, exec repo
 	return nil
 }
 
-// GetHistoryByTaskID возвращает историю изменений конкретной задачи с поддержкой детерминированной пагинации
 func (r *taskHistoryRepository) GetHistoryByTaskID(ctx context.Context, exec repository.DBEngine, filter model.TaskHistoryFilter) ([]model.TaskHistory, error) {
 	if filter.TaskID == 0 {
 		return nil, repository.ErrTaskIDRequired
 	}
 
-	// Сортировка по created_at DESC, id DESC гарантирует детерминированную пагинацию,
-	// даже если несколько записей имеют одинаковое время с точностью до секунды.
 	query := `
 		SELECT id, task_id, changed_by, changes, created_at
 		FROM task_history

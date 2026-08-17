@@ -44,7 +44,6 @@ func NewTaskService(
 }
 
 func (s *taskService) CreateTask(ctx context.Context, userID int64, req dto.CreateTaskRequest) (*dto.TaskResponse, error) {
-	// 1. Проверяем, состоит ли создатель в команде
 	isMember, err := s.teamMemberRepo.IsMember(ctx, nil, req.TeamID, userID)
 	if err != nil {
 		return nil, fmt.Errorf("check member status: %w", err)
@@ -53,7 +52,6 @@ func (s *taskService) CreateTask(ctx context.Context, userID int64, req dto.Crea
 		return nil, ErrPermissionDenied
 	}
 
-	// 2. Если указан исполнитель, проверяем его наличие в той же команде
 	if req.AssigneeID != nil {
 		assigneeMember, err := s.teamMemberRepo.IsMember(ctx, nil, req.TeamID, *req.AssigneeID)
 		if err != nil {
@@ -77,7 +75,6 @@ func (s *taskService) CreateTask(ctx context.Context, userID int64, req dto.Crea
 		Version:     1,
 	}
 
-	// 3. Атомарное создание задачи и начальной записи истории
 	err = s.transactor.WithinTransaction(ctx, func(exec repository.DBEngine) error {
 		if err := s.taskRepo.CreateTask(ctx, exec, task); err != nil {
 			return fmt.Errorf("create task repo: %w", err)
@@ -111,7 +108,6 @@ func (s *taskService) CreateTask(ctx context.Context, userID int64, req dto.Crea
 		return nil, err
 	}
 
-	// 4. Инвалидация кеша списка задач команды
 	if s.cacheInvalidator != nil {
 		if err := s.cacheInvalidator.InvalidateTeamCache(ctx, task.TeamID); err != nil {
 			s.logger.Warn("failed to invalidate team cache after task creation",
@@ -186,7 +182,6 @@ func (s *taskService) UpdateTask(ctx context.Context, userID, taskID int64, req 
 		return nil, fmt.Errorf("get task by id: %w", err)
 	}
 
-	// Проверка версии для оптимистичной блокировки
 	if task.Version != req.Version {
 		return nil, ErrVersionConflict
 	}
@@ -203,12 +198,10 @@ func (s *taskService) UpdateTask(ctx context.Context, userID, taskID int64, req 
 	isAssignee := task.AssigneeID != nil && *task.AssigneeID == userID
 	isOwnerOrAdmin := role == model.TeamRoleOwner || role == model.TeamRoleAdmin
 
-	// Обычный участник (не создатель и не исполнитель) не может редактировать задачу
 	if !isOwnerOrAdmin && !isCreator && !isAssignee {
 		return nil, ErrPermissionDenied
 	}
 
-	// Исполнитель (не owner/admin и не создатель) может менять только статус
 	if isAssignee && !isOwnerOrAdmin && !isCreator {
 		if req.Title != nil || req.Description != nil || req.AssigneeID != nil {
 			return nil, ErrPermissionDenied
@@ -218,7 +211,6 @@ func (s *taskService) UpdateTask(ctx context.Context, userID, taskID int64, req 
 	changes := make(model.TaskHistoryChange)
 	now := time.Now().UTC()
 
-	// Валидация нового исполнителя
 	if req.AssigneeID != nil && (task.AssigneeID == nil || *task.AssigneeID != *req.AssigneeID) {
 		assigneeMember, err := s.teamMemberRepo.IsMember(ctx, nil, task.TeamID, *req.AssigneeID)
 		if err != nil {
@@ -260,16 +252,13 @@ func (s *taskService) UpdateTask(ctx context.Context, userID, taskID int64, req 
 		}
 	}
 
-	// Если изменений нет, возвращаем текущую модель без обращения к БД
 	if len(changes) == 0 {
 		return s.toTaskResponse(task), nil
 	}
 
-	// Инкремент версии и обновление времени совершаются ДО отправки в репозиторий
 	task.Version++
 	task.UpdatedAt = now
 
-	// Атомарное обновление задачи и сохранение истории
 	err = s.transactor.WithinTransaction(ctx, func(exec repository.DBEngine) error {
 		if err := s.taskRepo.UpdateTask(ctx, exec, task); err != nil {
 			if errors.Is(err, repository.ErrTaskConflict) {
@@ -295,7 +284,6 @@ func (s *taskService) UpdateTask(ctx context.Context, userID, taskID int64, req 
 		return nil, err
 	}
 
-	// Инвалидация кеша
 	if s.cacheInvalidator != nil {
 		if err := s.cacheInvalidator.InvalidateTeamCache(ctx, task.TeamID); err != nil {
 			s.logger.Warn("failed to invalidate team cache after task update",
@@ -329,7 +317,7 @@ func (s *taskService) GetTaskHistory(ctx context.Context, userID, taskID int64, 
 
 	task, err := s.taskRepo.GetTaskByID(ctx, nil, taskID)
 	if err != nil {
-		return nil, ErrTaskNotFound // упрощено для примера
+		return nil, ErrTaskNotFound
 	}
 
 	if err := s.checkMember(ctx, userID, task.TeamID); err != nil {

@@ -16,7 +16,6 @@ type teamMemberRepository struct {
 	db *sql.DB
 }
 
-// NewTeamMemberRepository создает новый экземпляр репозитория участников команд
 func NewTeamMemberRepository(db *sql.DB) repository.TeamMemberRepository {
 	return &teamMemberRepository{db: db}
 }
@@ -28,7 +27,6 @@ func (r *teamMemberRepository) getExec(exec repository.DBEngine) repository.DBEn
 	return r.db
 }
 
-// AddMember добавляет пользователя в команду
 func (r *teamMemberRepository) AddMember(ctx context.Context, exec repository.DBEngine, member *model.TeamMember) error {
 	if member == nil {
 		return errors.New("team member cannot be nil")
@@ -57,7 +55,6 @@ func (r *teamMemberRepository) AddMember(ctx context.Context, exec repository.DB
 	return nil
 }
 
-// UpdateMemberRole обновляет роль участника команды
 func (r *teamMemberRepository) UpdateMemberRole(ctx context.Context, exec repository.DBEngine, teamID, userID int64, newRole model.TeamRole) error {
 	query := `
 		UPDATE team_members
@@ -82,7 +79,6 @@ func (r *teamMemberRepository) UpdateMemberRole(ctx context.Context, exec reposi
 	return nil
 }
 
-// RemoveMember удаляет пользователя из команды
 func (r *teamMemberRepository) RemoveMember(ctx context.Context, exec repository.DBEngine, teamID, userID int64) error {
 	query := `
 		DELETE FROM team_members
@@ -106,7 +102,6 @@ func (r *teamMemberRepository) RemoveMember(ctx context.Context, exec repository
 	return nil
 }
 
-// GetMember возвращает детальную информацию об участнике
 func (r *teamMemberRepository) GetMember(ctx context.Context, exec repository.DBEngine, teamID, userID int64) (*model.TeamMember, error) {
 	query := `
 		SELECT team_id, user_id, role
@@ -131,7 +126,6 @@ func (r *teamMemberRepository) GetMember(ctx context.Context, exec repository.DB
 	return &member, nil
 }
 
-// GetMemberRole возвращает роль конкретного пользователя в команде
 func (r *teamMemberRepository) GetMemberRole(ctx context.Context, exec repository.DBEngine, teamID, userID int64) (model.TeamRole, error) {
 	query := `
 		SELECT role
@@ -152,7 +146,6 @@ func (r *teamMemberRepository) GetMemberRole(ctx context.Context, exec repositor
 	return role, nil
 }
 
-// ListTeamMembers возвращает список всех участников команды
 func (r *teamMemberRepository) ListTeamMembers(ctx context.Context, exec repository.DBEngine, teamID int64) ([]model.TeamMember, error) {
 	query := `
 		SELECT team_id, user_id, role
@@ -184,7 +177,6 @@ func (r *teamMemberRepository) ListTeamMembers(ctx context.Context, exec reposit
 	return members, nil
 }
 
-// IsMember проверяет, состоит ли пользователь в команде
 func (r *teamMemberRepository) IsMember(ctx context.Context, exec repository.DBEngine, teamID, userID int64) (bool, error) {
 	query := `
 		SELECT EXISTS(

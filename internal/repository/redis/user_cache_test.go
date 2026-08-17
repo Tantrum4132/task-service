@@ -49,7 +49,6 @@ func setupEnvironment(tb testing.TB) (*sql.DB, redisclient.Cmdable, func()) {
 		return db.PingContext(ctx) == nil
 	}, 10*time.Second, 500*time.Millisecond, "mysql ping failed")
 
-	// 2. Инициализация таблицы users согласно схеме 20260813162630_init_schema.sql
 	createTableSQL := `
 	CREATE TABLE IF NOT EXISTS users (
 		id BIGINT AUTO_INCREMENT PRIMARY KEY,

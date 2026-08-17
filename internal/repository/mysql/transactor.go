@@ -13,14 +13,12 @@ type transactor struct {
 	db *sql.DB
 }
 
-// NewTransactor создает новый экземпляр транзактора MySQL.
 func NewTransactor(db *sql.DB) service.Transactor {
 	return &transactor{
 		db: db,
 	}
 }
 
-// WithinTransaction выполняет функцию fn внутри SQL-транзакции.
 func (t *transactor) WithinTransaction(ctx context.Context, fn func(exec repository.DBEngine) error) error {
 	tx, err := t.db.BeginTx(ctx, nil)
 	if err != nil {

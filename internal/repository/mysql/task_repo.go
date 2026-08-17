@@ -16,7 +16,6 @@ type taskRepository struct {
 	db *sql.DB
 }
 
-// NewTaskRepository создает новый экземпляр репозитория задач
 func NewTaskRepository(db *sql.DB) repository.TaskRepository {
 	return &taskRepository{db: db}
 }
@@ -28,7 +27,6 @@ func (r *taskRepository) getExec(exec repository.DBEngine) repository.DBEngine {
 	return r.db
 }
 
-// CreateTask создает новую задачу
 func (r *taskRepository) CreateTask(ctx context.Context, exec repository.DBEngine, task *model.Task) error {
 	if task == nil {
 		return errors.New("task cannot be nil")
@@ -39,7 +37,6 @@ func (r *taskRepository) CreateTask(ctx context.Context, exec repository.DBEngin
 		task.Version = 1
 	}
 
-	// Сервис обязался передать валидные системные даты
 	if task.CreatedAt.IsZero() || task.UpdatedAt.IsZero() {
 		return repository.ErrInvalidTaskPayload
 	}
@@ -80,7 +77,6 @@ func (r *taskRepository) CreateTask(ctx context.Context, exec repository.DBEngin
 	return nil
 }
 
-// GetTaskByID возвращает задачу по её ID
 func (r *taskRepository) GetTaskByID(ctx context.Context, exec repository.DBEngine, id int64) (*model.Task, error) {
 	query := `
 		SELECT id, team_id, title, description, status, created_by, assignee_id, created_at, updated_at, closed_at, version
@@ -113,7 +109,6 @@ func (r *taskRepository) GetTaskByID(ctx context.Context, exec repository.DBEngi
 	return &task, nil
 }
 
-// UpdateTask обновляет задачу с учетом оптимистичной блокировки (по версии)
 func (r *taskRepository) UpdateTask(ctx context.Context, exec repository.DBEngine, task *model.Task) error {
 	if task == nil {
 		return errors.New("task cannot be nil")
@@ -164,13 +159,11 @@ func (r *taskRepository) UpdateTask(ctx context.Context, exec repository.DBEngin
 		return repository.ErrTaskConflict
 	}
 
-	// Инкрементируем версию локально после успешного обновления в БД
 	task.Version++
 
 	return nil
 }
 
-// DeleteTask удаляет задачу из БД
 func (r *taskRepository) DeleteTask(ctx context.Context, exec repository.DBEngine, id int64) error {
 	query := `DELETE FROM tasks WHERE id = ?`
 	runner := r.getExec(exec)
@@ -191,7 +184,6 @@ func (r *taskRepository) DeleteTask(ctx context.Context, exec repository.DBEngin
 	return nil
 }
 
-// ListTasks возвращает список задач команды с учетом динамических фильтров
 func (r *taskRepository) ListTasks(ctx context.Context, exec repository.DBEngine, filter model.TaskFilter) ([]model.Task, error) {
 	if filter.TeamID == 0 {
 		return nil, repository.ErrTeamIDRequired

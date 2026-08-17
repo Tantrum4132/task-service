@@ -16,7 +16,6 @@ type teamRepository struct {
 	db *sql.DB
 }
 
-// NewTeamRepository создает новый экземпляр репозитория команд
 func NewTeamRepository(db *sql.DB) repository.TeamRepository {
 	return &teamRepository{db: db}
 }
@@ -28,7 +27,6 @@ func (r *teamRepository) getExec(exec repository.DBEngine) repository.DBEngine {
 	return r.db
 }
 
-// CreateTeam создает команду
 func (r *teamRepository) CreateTeam(ctx context.Context, exec repository.DBEngine, team *model.Team) error {
 	if team == nil {
 		return errors.New("team cannot be nil")
@@ -58,7 +56,6 @@ func (r *teamRepository) CreateTeam(ctx context.Context, exec repository.DBEngin
 	return nil
 }
 
-// GetTeamByID возвращает команду по ее ID
 func (r *teamRepository) GetTeamByID(ctx context.Context, exec repository.DBEngine, id int64) (*model.Team, error) {
 	query := `
 		SELECT id, name, created_by, created_at
@@ -85,7 +82,6 @@ func (r *teamRepository) GetTeamByID(ctx context.Context, exec repository.DBEngi
 	return &team, nil
 }
 
-// GetUserTeams возвращает список команд, в которых состоит пользователь
 func (r *teamRepository) GetUserTeams(ctx context.Context, exec repository.DBEngine, userID int64) ([]model.Team, error) {
 	query := `
 		SELECT t.id, t.name, t.created_by, t.created_at

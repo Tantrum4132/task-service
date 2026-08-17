@@ -108,14 +108,12 @@ type TaskHistory struct {
 	CreatedAt time.Time         `db:"created_at"`
 }
 
-// TaskHistoryFilter содержит параметры фильтрации и пагинации истории задач
 type TaskHistoryFilter struct {
 	TaskID int64
 	Limit  int
 	Offset int
 }
 
-// TaskFilter содержит параметры фильтрации для получения списка задач
 type TaskFilter struct {
 	TeamID     int64
 	Status     *TaskStatus

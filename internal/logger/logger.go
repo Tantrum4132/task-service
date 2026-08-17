@@ -9,19 +9,16 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// NewLogger инициализирует и возвращает zap.Logger на основе конфигурации.
 func NewLogger(cfg *config.Config) (*zap.Logger, error) {
 	if cfg == nil {
 		return zap.NewNop(), nil
 	}
 
-	// 1. Определение уровня логирования
 	var level zapcore.Level
 	if err := level.UnmarshalText([]byte(cfg.Logging.Level)); err != nil {
 		level = zapcore.InfoLevel
 	}
 
-	// 2. Базовая конфигурация под окружение
 	var zapCfg zap.Config
 	if cfg.Environment == "production" {
 		zapCfg = zap.NewProductionConfig()
@@ -33,7 +30,6 @@ func NewLogger(cfg *config.Config) (*zap.Logger, error) {
 
 	zapCfg.Level = zap.NewAtomicLevelAt(level)
 
-	// 3. Выбор формата вывода (json / console)
 	switch cfg.Logging.Format {
 	case "json":
 		zapCfg.Encoding = "json"

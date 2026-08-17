@@ -34,7 +34,6 @@ type teamService struct {
 	logger         *zap.Logger
 }
 
-// NewTeamService создает новый экземпляр TeamService.
 func NewTeamService(
 	teamRepo repository.TeamRepository,
 	teamMemberRepo repository.TeamMemberRepository,
@@ -53,7 +52,6 @@ func NewTeamService(
 	}
 }
 
-// CreateTeam создает новую команду и добавляет текущего пользователя как создателя (owner) в одной транзакции.
 func (s *teamService) CreateTeam(ctx context.Context, userID int64, req dto.CreateTeamRequest) (*dto.TeamResponse, error) {
 	var team *model.Team
 
@@ -95,7 +93,6 @@ func (s *teamService) CreateTeam(ctx context.Context, userID int64, req dto.Crea
 	}, nil
 }
 
-// GetUserTeams возвращает список команд текущего пользователя.
 func (s *teamService) GetUserTeams(ctx context.Context, userID int64) ([]dto.TeamResponse, error) {
 	teams, err := s.teamRepo.GetUserTeams(ctx, s.db, userID)
 	if err != nil {
@@ -123,7 +120,6 @@ func (s *teamService) InviteMember(ctx context.Context, actorID, teamID int64, r
 	}
 
 	return s.transactor.WithinTransaction(ctx, func(exec repository.DBEngine) error {
-		// 1. Проверка прав внутри транзакции
 		actorRole, err := s.teamMemberRepo.GetMemberRole(ctx, exec, teamID, actorID)
 		if err != nil {
 			return err
@@ -132,7 +128,6 @@ func (s *teamService) InviteMember(ctx context.Context, actorID, teamID int64, r
 			return ErrAccessDenied
 		}
 
-		// 2. Добавление участника
 		member := &model.TeamMember{
 			TeamID: teamID,
 			UserID: req.UserID,
