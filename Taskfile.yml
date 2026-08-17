@@ -1,0 +1,69 @@
+version: '3'
+
+vars:
+  GOOSE_DRIVER: mysql
+  GOOSE_DBSTRING: "taskuser:taskpass@tcp(127.0.0.1:3306)/taskdb?parseTime=true"
+  MIGRATIONS_DIR: migrations
+  MAIN_FILE: cmd/main.go
+  SWAGGER_DIR: docs
+
+tasks:
+  swagger:
+    desc: Сгенерировать документацию Swagger
+    cmds:
+      - swag init -g {{.MAIN_FILE}} -o {{.SWAGGER_DIR}} --parseDependency --parseInternal
+
+  swagger-fmt:
+    desc: Отформатировать комментарии Swagger в коде
+    cmds:
+      - swag fmt
+
+  migrate-up:
+    desc: Применить миграции
+    cmds:
+      - goose -dir {{.MIGRATIONS_DIR}} {{.GOOSE_DRIVER}} "{{.GOOSE_DBSTRING}}" up
+
+  migrate-down:
+    desc: Откатить последнюю миграцию
+    cmds:
+      - goose -dir {{.MIGRATIONS_DIR}} {{.GOOSE_DRIVER}} "{{.GOOSE_DBSTRING}}" down
+
+  migrate-status:
+    desc: Показать статус миграций
+    cmds:
+      - goose -dir {{.MIGRATIONS_DIR}} {{.GOOSE_DRIVER}} "{{.GOOSE_DBSTRING}}" status
+
+  up:
+    desc: Поднять все сервисы
+    cmds:
+      - docker-compose up -d --build
+
+  down:
+    desc: Остановить все сервисы
+    cmds:
+      - docker-compose down
+
+  down-v:
+    desc: Полная очистка с удалением томов
+    cmds:
+      - docker-compose down -v
+    confirm: "Вы уверены, что хотите удалить данные MySQL и Redis?"
+
+  logs:
+    desc: Просмотр логов
+    cmds:
+      - docker-compose logs -f
+
+  ps:
+    desc: Статус сервисов
+    cmds:
+      - docker-compose ps
+
+  mock:
+    desc: "Generate all gomock files using go generate"
+    cmds:
+      - go generate ./...
+
+  rebuild:
+    desc: Пересобрать и перезапустить
+    deps: [down, up]

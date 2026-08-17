@@ -1,0 +1,47 @@
+environment: "development" # Варианты: development, production
+
+server:
+  host: "0.0.0.0"
+  port: "8080"
+  read_timeout: 10s
+  write_timeout: 10s
+  shutdown_timeout: 10s
+
+database:
+  dialect: "mysql"
+  host: "mysql"
+  port: "3306"
+  user: "taskuser"
+  password: "taskpass"
+  name: "taskdb"
+  ssl_mode: "disabled"
+  max_open_connections: 25
+  max_idle_connections: 10
+  connection_lifetime: 15m
+
+jwt:
+  secret: "your-super-secret-jwt-key-min-8-chars" # Длина не менее 8 символов
+  lifespan: 24h
+
+logging:
+  level: "info" # Варианты: debug, info, warn, error
+  format: "json" # Варианты: json, console
+
+cors:
+  allowed_origins:
+    - "http://localhost:3000"
+    - "http://127.0.0.1:3000"
+
+redis:
+  enabled: true
+  addr: "127.0.0.1:6379"
+  password: ""
+  db: 0
+
+cache-services:
+  user:
+    enabled: true
+    ttl: 15m
+  task:
+    enabled: true
+    ttl: 5m

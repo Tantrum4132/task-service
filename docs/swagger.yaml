@@ -1,0 +1,800 @@
+basePath: /
+definitions:
+  basis_internal_dto.AuthResponse:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+    type: object
+  basis_internal_dto.CreateCommentRequest:
+    properties:
+      content:
+        maxLength: 2000
+        minLength: 1
+        type: string
+    required:
+    - content
+    type: object
+  basis_internal_dto.CreateTaskRequest:
+    properties:
+      assignee_id:
+        type: integer
+      description:
+        maxLength: 5000
+        type: string
+      team_id:
+        type: integer
+      title:
+        maxLength: 255
+        minLength: 1
+        type: string
+    required:
+    - team_id
+    - title
+    type: object
+  basis_internal_dto.CreateTeamRequest:
+    properties:
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    required:
+    - name
+    type: object
+  basis_internal_dto.InviteMemberRequest:
+    properties:
+      role:
+        enum:
+        - admin
+        - member
+        type: string
+      user_id:
+        type: integer
+    required:
+    - role
+    - user_id
+    type: object
+  basis_internal_dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  basis_internal_dto.RegisterRequest:
+    properties:
+      email:
+        maxLength: 255
+        type: string
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      password:
+        maxLength: 100
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  basis_internal_dto.TaskCommentResponse:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      task_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  basis_internal_dto.TaskHistoryResponse:
+    properties:
+      changed_by:
+        type: integer
+      changes: {}
+      created_at:
+        type: string
+      id:
+        type: integer
+      task_id:
+        type: integer
+    type: object
+  basis_internal_dto.TaskResponse:
+    properties:
+      assignee_id:
+        type: integer
+      closed_at:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+      team_id:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+      version:
+        type: integer
+    type: object
+  basis_internal_dto.TaskStatsResponse:
+    properties:
+      avg_time_to_close_hours:
+        type: number
+      tasks_by_status:
+        additionalProperties:
+          type: integer
+        type: object
+      team_id:
+        type: integer
+      top_assignees:
+        items:
+          $ref: '#/definitions/basis_internal_dto.TopAssignee'
+        type: array
+      total_comments:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  basis_internal_dto.TeamResponse:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  basis_internal_dto.TopAssignee:
+    properties:
+      closed_tasks:
+        type: integer
+      user_id:
+        type: integer
+      user_name:
+        type: string
+    type: object
+  basis_internal_dto.UpdateTaskRequest:
+    properties:
+      assignee_id:
+        type: integer
+      description:
+        maxLength: 5000
+        type: string
+      status:
+        enum:
+        - todo
+        - in_progress
+        - done
+        type: string
+      title:
+        maxLength: 255
+        minLength: 1
+        type: string
+      version:
+        description: Обязательно для оптимистической блокировки
+        type: integer
+    required:
+    - version
+    type: object
+  gin.H:
+    additionalProperties: {}
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@basis.local
+    name: API Support
+  description: REST API сервиса управления задачами и командной аналитики.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Task Management System API
+  version: "1.0"
+paths:
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: Проверяет учетные данные пользователя и возвращает JWT-токен.
+      parameters:
+      - description: Учетные данные пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/basis_internal_dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешная аутентификация
+          schema:
+            $ref: '#/definitions/basis_internal_dto.AuthResponse'
+        "400":
+          description: Невалидное тело запроса или ошибки валидации
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Неверный email или пароль
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Аутентификация пользователя
+      tags:
+      - auth
+  /api/v1/register:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового пользователя в системе с хешированием пароля.
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/basis_internal_dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Пользователь успешно зарегистрирован
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Невалидное тело запроса или ошибки валидации
+          schema:
+            $ref: '#/definitions/gin.H'
+        "409":
+          description: Пользователь с таким email уже существует
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Регистрация нового пользователя
+      tags:
+      - auth
+  /api/v1/tasks:
+    get:
+      description: Возвращает список задач указанной команды с поддержкой фильтрации
+        по статусу, исполнителю и пагинации.
+      parameters:
+      - description: ID команды
+        format: int64
+        in: query
+        name: team_id
+        required: true
+        type: integer
+      - description: Фильтр по статусу (todo, in_progress, done)
+        in: query
+        name: status
+        type: string
+      - description: Фильтр по ID исполнителя
+        format: int64
+        in: query
+        name: assignee_id
+        type: integer
+      - description: Лимит записей (по умолчанию 20)
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение (по умолчанию 0)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список задач
+          schema:
+            items:
+              $ref: '#/definitions/basis_internal_dto.TaskResponse'
+            type: array
+        "400":
+          description: Некорректный team_id
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Пользователь не входит в состав команды
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: Ошибка валидации параметров запроса
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Получение списка задач команды
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Создает задачу в указанной команде с привязкой к исполнителю при
+        необходимости.
+      parameters:
+      - description: Параметры создания задачи
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/basis_internal_dto.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Задача успешно создана
+          schema:
+            $ref: '#/definitions/basis_internal_dto.TaskResponse'
+        "400":
+          description: Невалидный запрос или исполнитель не состоит в команде
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Пользователь не состоит в команде задачи
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: Ошибка валидации полей
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Создание новой задачи
+      tags:
+      - tasks
+  /api/v1/tasks/{id}:
+    get:
+      description: Возвращает подробную информацию о задаче по ее идентификатору.
+      parameters:
+      - description: ID задачи
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Информация о задаче
+          schema:
+            $ref: '#/definitions/basis_internal_dto.TaskResponse'
+        "400":
+          description: Невалидный ID задачи
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Нет доступа к задаче
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Задача не найдена
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Получение задачи по ID
+      tags:
+      - tasks
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные задачи с учетом прав роли пользователя и оптимистичной
+        блокировки по полю version.
+      parameters:
+      - description: ID задачи
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные для обновления задачи
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/basis_internal_dto.UpdateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Задача успешно обновлена
+          schema:
+            $ref: '#/definitions/basis_internal_dto.TaskResponse'
+        "400":
+          description: Невалидный ID задачи или неверный исполнитель
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Недостаточно прав для редактирования
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Задача не найдена
+          schema:
+            $ref: '#/definitions/gin.H'
+        "409":
+          description: Конфликт версий (оптимистичная блокировка)
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: Ошибка валидации полей
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Обновление задачи
+      tags:
+      - tasks
+  /api/v1/tasks/{id}/comments:
+    get:
+      description: Возвращает все комментарии, оставленные к задаче.
+      parameters:
+      - description: ID задачи
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список комментариев
+          schema:
+            items:
+              $ref: '#/definitions/basis_internal_dto.TaskCommentResponse'
+            type: array
+        "400":
+          description: Невалидный ID задачи
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Пользователь не состоит в команде задачи
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Задача не найдена
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Получение списка комментариев задачи
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Создает новый комментарий к существующей задаче от имени текущего
+        пользователя.
+      parameters:
+      - description: ID задачи
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Текст комментария
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/basis_internal_dto.CreateCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Комментарий успешно создан
+          schema:
+            $ref: '#/definitions/basis_internal_dto.TaskCommentResponse'
+        "400":
+          description: Невалидный ID задачи или пустое тело
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Пользователь не состоит в команде задачи
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Задача не найдена
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: Ошибка валидации комментария
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Добавление комментария к задаче
+      tags:
+      - tasks
+  /api/v1/tasks/{id}/history:
+    get:
+      description: Возвращает хронологический журнал изменений полей задачи.
+      parameters:
+      - description: ID задачи
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Лимит записей (по умолчанию 20)
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение (по умолчанию 0)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: История изменений задачи
+          schema:
+            items:
+              $ref: '#/definitions/basis_internal_dto.TaskHistoryResponse'
+            type: array
+        "400":
+          description: Невалидный ID задачи
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Нет доступа к просмотру истории
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Задача не найдена
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: История изменений задачи
+      tags:
+      - tasks
+  /api/v1/teams:
+    get:
+      description: Возвращает список всех команд, в которых состоит аутентифицированный
+        пользователь.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список команд пользователя
+          schema:
+            items:
+              $ref: '#/definitions/basis_internal_dto.TeamResponse'
+            type: array
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Получение списка команд пользователя
+      tags:
+      - teams
+    post:
+      consumes:
+      - application/json
+      description: Создает новую команду и автоматически делает текущего пользователя
+        ее владельцем (owner).
+      parameters:
+      - description: Данные для создания команды
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/basis_internal_dto.CreateTeamRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Команда успешно создана
+          schema:
+            $ref: '#/definitions/basis_internal_dto.TeamResponse'
+        "400":
+          description: Невалидное тело запроса или ошибки валидации
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Создание новой команды
+      tags:
+      - teams
+  /api/v1/teams/{id}/invite:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет пользователя в команду. Выполнять операцию могут только
+        участники с ролью owner или admin. Выдать роль owner через приглашение нельзя.
+      parameters:
+      - description: ID команды
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные приглашения (user_id и роль)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/basis_internal_dto.InviteMemberRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Участник успешно добавлен в команду
+        "400":
+          description: Невалидный ID команды, попытка выдать роль owner или пользователь
+            уже в команде
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Недостаточно прав (пользователь не является owner или admin)
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Команда или приглашаемый пользователь не найдены
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Приглашение нового участника в команду
+      tags:
+      - teams
+  /api/v1/teams/{team_id}/stats:
+    get:
+      description: Возвращает сводные метрики по задачам, комментариям и ТОП-3 исполнителям.
+        Доступно только ролям owner и admin.
+      parameters:
+      - description: ID команды
+        format: int64
+        in: path
+        name: team_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Аналитический отчет
+          schema:
+            $ref: '#/definitions/basis_internal_dto.TaskStatsResponse'
+        "400":
+          description: Невалидный ID команды
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/gin.H'
+        "403":
+          description: Недостаточно прав (не owner или admin)
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Команда не найдена
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - BearerAuth: []
+      summary: Получение аналитического отчета по команде
+      tags:
+      - teams
+securityDefinitions:
+  BearerAuth:
+    description: 'Введите токен в формате: Bearer <JWT_TOKEN>'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
