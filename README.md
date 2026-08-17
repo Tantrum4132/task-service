@@ -20,9 +20,7 @@ REST API сервис управления задачами, командной 
 ├── docs/                     # Автосгенерированная документация Swagger
 ├── Dockerfile                # Multi-stage Dockerfile
 ├── docker-compose.yml        # Оркестрация контейнеров (App + MySQL + Redis)
-├── .gitignore
 ├── README.md                 # Инструкции по запуску, миграциям, примеры
-├── go.mod / go.sum
 └── Taskfile.yml              # Автоматизация команд разработки
 ```
 
@@ -41,7 +39,7 @@ cp config.yaml.example config.yaml
 ```
 
 2. Запуск через Docker Compose
-Поднять все сервисы (MySQL, Redis, App) с проверкой готовности (healthcheck):
+Поднять все сервисы (MySQL, Redis, App):
 
 ```bash
 task up
@@ -63,15 +61,13 @@ task migrate-down
 task migrate-status
 ```
 
-### wagger / OpenAPI Документация
+### Swagger / OpenAPI Документация
 ```bash 
 task swagger
 ```
 
 После запуска приложения интерактивная Swagger UI схема доступна по адресу:
-```
-http://localhost:8080/swagger/index.html
-```
+`http://localhost:8080/swagger/index.html`
 
 ## Примеры curl-запросов к API
 

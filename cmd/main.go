@@ -17,6 +17,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "github.com/Tantrum4132/task-service/docs"
 )
 
 // @title           Task Management System API
@@ -68,11 +73,14 @@ func main() {
 		router.Use(middleware.CORS(container.Config.CORS.AllowedOrigins))
 	}
 
-	// 5. Настройка JWT и Auth Middleware
+	// 5. Подключение маршрута для Swagger UI
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// 6. Настройка JWT и Auth Middleware
 	jwtManager := util.NewJWTManager(container.Config.JWT.Secret)
 	authMiddleware := middleware.Auth(jwtManager)
 
-	// 6. Регистрация API маршрутов v1
+	// 7. Регистрация API маршрутов v1
 	v1 := router.Group("/api/v1")
 	{
 		// 🔓 Публичная группа (Аутентификация и Регистрация) с ограничением запросов (Rate Limiting)
@@ -102,7 +110,7 @@ func main() {
 		}
 	}
 
-	// 7. Конфигурация HTTP-сервера
+	// 8. Конфигурация HTTP-сервера
 	srv := &http.Server{
 		Addr:         container.Config.ServerAddr(),
 		Handler:      router,
@@ -118,7 +126,7 @@ func main() {
 		}
 	}()
 
-	// 8. Graceful Shutdown (Перехват сигналов завершения ОС)
+	// 9. Graceful Shutdown (Перехват сигналов завершения ОС)
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit

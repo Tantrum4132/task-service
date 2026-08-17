@@ -26,6 +26,7 @@ WORKDIR /app
 
 # Скопировать бинарник и дефолтный конфиг
 COPY --from=builder /app/task-service /app/task-service
+COPY --from=builder /app/docs /app/docs
 COPY config.yaml.example /app/config.yaml
 
 # Выставляем права после скопированных файлов
