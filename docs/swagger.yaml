@@ -1,13 +1,16 @@
 basePath: /
 definitions:
-  basis_internal_dto.AuthResponse:
+  gin.H:
+    additionalProperties: {}
+    type: object
+  github_com_Tantrum4132_task-service_internal_dto.AuthResponse:
     properties:
       access_token:
         type: string
       expires_in:
         type: integer
     type: object
-  basis_internal_dto.CreateCommentRequest:
+  github_com_Tantrum4132_task-service_internal_dto.CreateCommentRequest:
     properties:
       content:
         maxLength: 2000
@@ -16,7 +19,7 @@ definitions:
     required:
     - content
     type: object
-  basis_internal_dto.CreateTaskRequest:
+  github_com_Tantrum4132_task-service_internal_dto.CreateTaskRequest:
     properties:
       assignee_id:
         type: integer
@@ -33,7 +36,7 @@ definitions:
     - team_id
     - title
     type: object
-  basis_internal_dto.CreateTeamRequest:
+  github_com_Tantrum4132_task-service_internal_dto.CreateTeamRequest:
     properties:
       name:
         maxLength: 100
@@ -42,7 +45,7 @@ definitions:
     required:
     - name
     type: object
-  basis_internal_dto.InviteMemberRequest:
+  github_com_Tantrum4132_task-service_internal_dto.InviteMemberRequest:
     properties:
       role:
         enum:
@@ -55,7 +58,7 @@ definitions:
     - role
     - user_id
     type: object
-  basis_internal_dto.LoginRequest:
+  github_com_Tantrum4132_task-service_internal_dto.LoginRequest:
     properties:
       email:
         type: string
@@ -65,7 +68,7 @@ definitions:
     - email
     - password
     type: object
-  basis_internal_dto.RegisterRequest:
+  github_com_Tantrum4132_task-service_internal_dto.RegisterRequest:
     properties:
       email:
         maxLength: 255
@@ -83,7 +86,7 @@ definitions:
     - name
     - password
     type: object
-  basis_internal_dto.TaskCommentResponse:
+  github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse:
     properties:
       content:
         type: string
@@ -96,7 +99,7 @@ definitions:
       user_id:
         type: integer
     type: object
-  basis_internal_dto.TaskHistoryResponse:
+  github_com_Tantrum4132_task-service_internal_dto.TaskHistoryResponse:
     properties:
       changed_by:
         type: integer
@@ -108,7 +111,7 @@ definitions:
       task_id:
         type: integer
     type: object
-  basis_internal_dto.TaskResponse:
+  github_com_Tantrum4132_task-service_internal_dto.TaskResponse:
     properties:
       assignee_id:
         type: integer
@@ -133,7 +136,7 @@ definitions:
       version:
         type: integer
     type: object
-  basis_internal_dto.TaskStatsResponse:
+  github_com_Tantrum4132_task-service_internal_dto.TaskStatsResponse:
     properties:
       avg_time_to_close_hours:
         type: number
@@ -145,14 +148,14 @@ definitions:
         type: integer
       top_assignees:
         items:
-          $ref: '#/definitions/basis_internal_dto.TopAssignee'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TopAssignee'
         type: array
       total_comments:
         type: integer
       updated_at:
         type: string
     type: object
-  basis_internal_dto.TeamResponse:
+  github_com_Tantrum4132_task-service_internal_dto.TeamResponse:
     properties:
       created_at:
         type: string
@@ -163,7 +166,7 @@ definitions:
       name:
         type: string
     type: object
-  basis_internal_dto.TopAssignee:
+  github_com_Tantrum4132_task-service_internal_dto.TopAssignee:
     properties:
       closed_tasks:
         type: integer
@@ -172,7 +175,7 @@ definitions:
       user_name:
         type: string
     type: object
-  basis_internal_dto.UpdateTaskRequest:
+  github_com_Tantrum4132_task-service_internal_dto.UpdateTaskRequest:
     properties:
       assignee_id:
         type: integer
@@ -194,9 +197,6 @@ definitions:
         type: integer
     required:
     - version
-    type: object
-  gin.H:
-    additionalProperties: {}
     type: object
 host: localhost:8080
 info:
@@ -222,14 +222,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/basis_internal_dto.LoginRequest'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Успешная аутентификация
           schema:
-            $ref: '#/definitions/basis_internal_dto.AuthResponse'
+            $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.AuthResponse'
         "400":
           description: Невалидное тело запроса или ошибки валидации
           schema:
@@ -256,7 +256,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/basis_internal_dto.RegisterRequest'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.RegisterRequest'
       produces:
       - application/json
       responses:
@@ -315,7 +315,7 @@ paths:
           description: Список задач
           schema:
             items:
-              $ref: '#/definitions/basis_internal_dto.TaskResponse'
+              $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse'
             type: array
         "400":
           description: Некорректный team_id
@@ -353,14 +353,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/basis_internal_dto.CreateTaskRequest'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateTaskRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Задача успешно создана
           schema:
-            $ref: '#/definitions/basis_internal_dto.TaskResponse'
+            $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse'
         "400":
           description: Невалидный запрос или исполнитель не состоит в команде
           schema:
@@ -402,7 +402,7 @@ paths:
         "200":
           description: Информация о задаче
           schema:
-            $ref: '#/definitions/basis_internal_dto.TaskResponse'
+            $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse'
         "400":
           description: Невалидный ID задачи
           schema:
@@ -445,14 +445,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/basis_internal_dto.UpdateTaskRequest'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.UpdateTaskRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Задача успешно обновлена
           schema:
-            $ref: '#/definitions/basis_internal_dto.TaskResponse'
+            $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse'
         "400":
           description: Невалидный ID задачи или неверный исполнитель
           schema:
@@ -503,7 +503,7 @@ paths:
           description: Список комментариев
           schema:
             items:
-              $ref: '#/definitions/basis_internal_dto.TaskCommentResponse'
+              $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse'
             type: array
         "400":
           description: Невалидный ID задачи
@@ -547,14 +547,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/basis_internal_dto.CreateCommentRequest'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateCommentRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Комментарий успешно создан
           schema:
-            $ref: '#/definitions/basis_internal_dto.TaskCommentResponse'
+            $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse'
         "400":
           description: Невалидный ID задачи или пустое тело
           schema:
@@ -609,7 +609,7 @@ paths:
           description: История изменений задачи
           schema:
             items:
-              $ref: '#/definitions/basis_internal_dto.TaskHistoryResponse'
+              $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskHistoryResponse'
             type: array
         "400":
           description: Невалидный ID задачи
@@ -647,7 +647,7 @@ paths:
           description: Список команд пользователя
           schema:
             items:
-              $ref: '#/definitions/basis_internal_dto.TeamResponse'
+              $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TeamResponse'
             type: array
         "401":
           description: Пользователь не авторизован
@@ -673,14 +673,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/basis_internal_dto.CreateTeamRequest'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateTeamRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Команда успешно создана
           schema:
-            $ref: '#/definitions/basis_internal_dto.TeamResponse'
+            $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TeamResponse'
         "400":
           description: Невалидное тело запроса или ошибки валидации
           schema:
@@ -716,7 +716,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/basis_internal_dto.InviteMemberRequest'
+          $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.InviteMemberRequest'
       produces:
       - application/json
       responses:
@@ -765,7 +765,7 @@ paths:
         "200":
           description: Аналитический отчет
           schema:
-            $ref: '#/definitions/basis_internal_dto.TaskStatsResponse'
+            $ref: '#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskStatsResponse'
         "400":
           description: Невалидный ID команды
           schema:

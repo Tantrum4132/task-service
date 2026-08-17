@@ -43,7 +43,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.LoginRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.LoginRequest"
                         }
                     }
                 ],
@@ -51,7 +51,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешная аутентификация",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.AuthResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.AuthResponse"
                         }
                     },
                     "400": {
@@ -95,7 +95,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.RegisterRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.RegisterRequest"
                         }
                     }
                 ],
@@ -184,7 +184,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                             }
                         }
                     },
@@ -244,7 +244,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.CreateTaskRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateTaskRequest"
                         }
                     }
                 ],
@@ -252,7 +252,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Задача успешно создана",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                         }
                     },
                     "400": {
@@ -317,7 +317,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Информация о задаче",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                         }
                     },
                     "400": {
@@ -384,7 +384,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.UpdateTaskRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.UpdateTaskRequest"
                         }
                     }
                 ],
@@ -392,7 +392,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Задача успешно обновлена",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                         }
                     },
                     "400": {
@@ -471,7 +471,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TaskCommentResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse"
                             }
                         }
                     },
@@ -539,7 +539,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.CreateCommentRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateCommentRequest"
                         }
                     }
                 ],
@@ -547,7 +547,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Комментарий успешно создан",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskCommentResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse"
                         }
                     },
                     "400": {
@@ -632,7 +632,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TaskHistoryResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskHistoryResponse"
                             }
                         }
                     },
@@ -690,7 +690,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TeamResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TeamResponse"
                             }
                         }
                     },
@@ -732,7 +732,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.CreateTeamRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateTeamRequest"
                         }
                     }
                 ],
@@ -740,7 +740,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Команда успешно создана",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TeamResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TeamResponse"
                         }
                     },
                     "400": {
@@ -797,7 +797,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.InviteMemberRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.InviteMemberRequest"
                         }
                     }
                 ],
@@ -867,7 +867,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Аналитический отчет",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskStatsResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskStatsResponse"
                         }
                     },
                     "400": {
@@ -905,7 +905,11 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "basis_internal_dto.AuthResponse": {
+        "gin.H": {
+            "type": "object",
+            "additionalProperties": {}
+        },
+        "github_com_Tantrum4132_task-service_internal_dto.AuthResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -916,7 +920,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.CreateCommentRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.CreateCommentRequest": {
             "type": "object",
             "required": [
                 "content"
@@ -929,7 +933,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.CreateTaskRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.CreateTaskRequest": {
             "type": "object",
             "required": [
                 "team_id",
@@ -953,7 +957,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.CreateTeamRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.CreateTeamRequest": {
             "type": "object",
             "required": [
                 "name"
@@ -966,7 +970,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.InviteMemberRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.InviteMemberRequest": {
             "type": "object",
             "required": [
                 "role",
@@ -985,7 +989,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.LoginRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.LoginRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -1000,7 +1004,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.RegisterRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.RegisterRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -1024,7 +1028,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.TaskCommentResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1044,7 +1048,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.TaskHistoryResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskHistoryResponse": {
             "type": "object",
             "properties": {
                 "changed_by": {
@@ -1062,7 +1066,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.TaskResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskResponse": {
             "type": "object",
             "properties": {
                 "assignee_id": {
@@ -1100,7 +1104,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.TaskStatsResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskStatsResponse": {
             "type": "object",
             "properties": {
                 "avg_time_to_close_hours": {
@@ -1118,7 +1122,7 @@ const docTemplate = `{
                 "top_assignees": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/basis_internal_dto.TopAssignee"
+                        "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TopAssignee"
                     }
                 },
                 "total_comments": {
@@ -1129,7 +1133,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.TeamResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TeamResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1146,7 +1150,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.TopAssignee": {
+        "github_com_Tantrum4132_task-service_internal_dto.TopAssignee": {
             "type": "object",
             "properties": {
                 "closed_tasks": {
@@ -1160,7 +1164,7 @@ const docTemplate = `{
                 }
             }
         },
-        "basis_internal_dto.UpdateTaskRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.UpdateTaskRequest": {
             "type": "object",
             "required": [
                 "version"
@@ -1191,10 +1195,6 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
-        },
-        "gin.H": {
-            "type": "object",
-            "additionalProperties": {}
         }
     },
     "securityDefinitions": {

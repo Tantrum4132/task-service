@@ -1,9 +1,9 @@
 package app
 
 import (
-	"basis/internal/repository/mysql"
-	"basis/internal/service"
-	"basis/internal/util"
+	"github.com/Tantrum4132/task-service/internal/repository/mysql"
+	"github.com/Tantrum4132/task-service/internal/service"
+	"github.com/Tantrum4132/task-service/internal/util"
 )
 
 type ServicesContainer struct {

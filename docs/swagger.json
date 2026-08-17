@@ -37,7 +37,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.LoginRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.LoginRequest"
                         }
                     }
                 ],
@@ -45,7 +45,7 @@
                     "200": {
                         "description": "Успешная аутентификация",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.AuthResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.AuthResponse"
                         }
                     },
                     "400": {
@@ -89,7 +89,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.RegisterRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.RegisterRequest"
                         }
                     }
                 ],
@@ -178,7 +178,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                             }
                         }
                     },
@@ -238,7 +238,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.CreateTaskRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateTaskRequest"
                         }
                     }
                 ],
@@ -246,7 +246,7 @@
                     "201": {
                         "description": "Задача успешно создана",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                         }
                     },
                     "400": {
@@ -311,7 +311,7 @@
                     "200": {
                         "description": "Информация о задаче",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                         }
                     },
                     "400": {
@@ -378,7 +378,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.UpdateTaskRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.UpdateTaskRequest"
                         }
                     }
                 ],
@@ -386,7 +386,7 @@
                     "200": {
                         "description": "Задача успешно обновлена",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskResponse"
                         }
                     },
                     "400": {
@@ -465,7 +465,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TaskCommentResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse"
                             }
                         }
                     },
@@ -533,7 +533,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.CreateCommentRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateCommentRequest"
                         }
                     }
                 ],
@@ -541,7 +541,7 @@
                     "201": {
                         "description": "Комментарий успешно создан",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskCommentResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse"
                         }
                     },
                     "400": {
@@ -626,7 +626,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TaskHistoryResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskHistoryResponse"
                             }
                         }
                     },
@@ -684,7 +684,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/basis_internal_dto.TeamResponse"
+                                "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TeamResponse"
                             }
                         }
                     },
@@ -726,7 +726,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.CreateTeamRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.CreateTeamRequest"
                         }
                     }
                 ],
@@ -734,7 +734,7 @@
                     "201": {
                         "description": "Команда успешно создана",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TeamResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TeamResponse"
                         }
                     },
                     "400": {
@@ -791,7 +791,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.InviteMemberRequest"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.InviteMemberRequest"
                         }
                     }
                 ],
@@ -861,7 +861,7 @@
                     "200": {
                         "description": "Аналитический отчет",
                         "schema": {
-                            "$ref": "#/definitions/basis_internal_dto.TaskStatsResponse"
+                            "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TaskStatsResponse"
                         }
                     },
                     "400": {
@@ -899,7 +899,11 @@
         }
     },
     "definitions": {
-        "basis_internal_dto.AuthResponse": {
+        "gin.H": {
+            "type": "object",
+            "additionalProperties": {}
+        },
+        "github_com_Tantrum4132_task-service_internal_dto.AuthResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -910,7 +914,7 @@
                 }
             }
         },
-        "basis_internal_dto.CreateCommentRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.CreateCommentRequest": {
             "type": "object",
             "required": [
                 "content"
@@ -923,7 +927,7 @@
                 }
             }
         },
-        "basis_internal_dto.CreateTaskRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.CreateTaskRequest": {
             "type": "object",
             "required": [
                 "team_id",
@@ -947,7 +951,7 @@
                 }
             }
         },
-        "basis_internal_dto.CreateTeamRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.CreateTeamRequest": {
             "type": "object",
             "required": [
                 "name"
@@ -960,7 +964,7 @@
                 }
             }
         },
-        "basis_internal_dto.InviteMemberRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.InviteMemberRequest": {
             "type": "object",
             "required": [
                 "role",
@@ -979,7 +983,7 @@
                 }
             }
         },
-        "basis_internal_dto.LoginRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.LoginRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -994,7 +998,7 @@
                 }
             }
         },
-        "basis_internal_dto.RegisterRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.RegisterRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -1018,7 +1022,7 @@
                 }
             }
         },
-        "basis_internal_dto.TaskCommentResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskCommentResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1038,7 +1042,7 @@
                 }
             }
         },
-        "basis_internal_dto.TaskHistoryResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskHistoryResponse": {
             "type": "object",
             "properties": {
                 "changed_by": {
@@ -1056,7 +1060,7 @@
                 }
             }
         },
-        "basis_internal_dto.TaskResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskResponse": {
             "type": "object",
             "properties": {
                 "assignee_id": {
@@ -1094,7 +1098,7 @@
                 }
             }
         },
-        "basis_internal_dto.TaskStatsResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TaskStatsResponse": {
             "type": "object",
             "properties": {
                 "avg_time_to_close_hours": {
@@ -1112,7 +1116,7 @@
                 "top_assignees": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/basis_internal_dto.TopAssignee"
+                        "$ref": "#/definitions/github_com_Tantrum4132_task-service_internal_dto.TopAssignee"
                     }
                 },
                 "total_comments": {
@@ -1123,7 +1127,7 @@
                 }
             }
         },
-        "basis_internal_dto.TeamResponse": {
+        "github_com_Tantrum4132_task-service_internal_dto.TeamResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1140,7 +1144,7 @@
                 }
             }
         },
-        "basis_internal_dto.TopAssignee": {
+        "github_com_Tantrum4132_task-service_internal_dto.TopAssignee": {
             "type": "object",
             "properties": {
                 "closed_tasks": {
@@ -1154,7 +1158,7 @@
                 }
             }
         },
-        "basis_internal_dto.UpdateTaskRequest": {
+        "github_com_Tantrum4132_task-service_internal_dto.UpdateTaskRequest": {
             "type": "object",
             "required": [
                 "version"
@@ -1185,10 +1189,6 @@
                     "type": "integer"
                 }
             }
-        },
-        "gin.H": {
-            "type": "object",
-            "additionalProperties": {}
         }
     },
     "securityDefinitions": {
