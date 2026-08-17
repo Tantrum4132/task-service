@@ -11,7 +11,6 @@ import (
 	redisclient "github.com/redis/go-redis/v9"
 )
 
-// Repositories объединяет все интерфейсы слоя доступа к данным.
 type Repositories struct {
 	User        repository.UserRepository
 	Team        repository.TeamRepository
@@ -22,7 +21,6 @@ type Repositories struct {
 	Stats       repository.StatsRepository
 }
 
-// NewRepositories создает и компонует репозитории согласно Clean Architecture.
 func NewRepositories(db *sql.DB, rdb redisclient.Cmdable, cfg *config.Config) *Repositories {
 	var (
 		userRepo        repository.UserRepository        = mysql.NewUserRepository(db)
@@ -34,7 +32,6 @@ func NewRepositories(db *sql.DB, rdb redisclient.Cmdable, cfg *config.Config) *R
 		statsRepo       repository.StatsRepository       = mysql.NewStatsRepository(db)
 	)
 
-	// Оборачивание в кеширующие декораторы
 	if cfg != nil && cfg.Redis.Enabled && rdb != nil {
 		if cfg.CacheServices.User.Enabled {
 			userRepo = redis.NewUserCacheDecorator(userRepo, rdb, cfg.CacheServices.User.TTL)

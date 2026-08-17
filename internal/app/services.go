@@ -14,22 +14,18 @@ type ServicesContainer struct {
 }
 
 func NewServicesContainer(c *Container) *ServicesContainer {
-	// 1. Вспомогательные утилиты и транзактор
 	jwtManager := util.NewJWTManager(c.Config.JWT.Secret)
 	transactor := mysql.NewTransactor(c.DB)
 
-	// 2. Определение инвалидатора кеша задач из репозитория
 	var cacheInvalidator service.TaskCacheInvalidator
 	if c.Config != nil && c.Config.Redis.Enabled && c.Redis != nil {
 		if c.Config.CacheServices.Task.Enabled {
-			// Репозиторий Task уже обернут в redis.TaskCacheDecorator внутри NewRepositories
 			if invalidator, ok := c.Repositories.Task.(service.TaskCacheInvalidator); ok {
 				cacheInvalidator = invalidator
 			}
 		}
 	}
 
-	// 3. Инициализация сервисов
 	authSvc := service.NewAuthService(
 		c.Repositories.User,
 		c.DB,

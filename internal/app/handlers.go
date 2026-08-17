@@ -7,14 +7,12 @@ import (
 	"go.uber.org/zap"
 )
 
-// HandlersContainer содержит инициализированные HTTP-хендлеры.
 type HandlersContainer struct {
 	Auth *handler.AuthHandler
 	Team *handler.TeamHandler
 	Task *handler.TaskHandler
 }
 
-// NewHandlersContainer собирает HTTP-хендлеры на основе сервисного контейнера.
 func NewHandlersContainer(services *ServicesContainer, validate *validator.Validate, logger *zap.Logger) *HandlersContainer {
 	return &HandlersContainer{
 		Auth: handler.NewAuthHandler(services.Auth, validate, logger),

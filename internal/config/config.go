@@ -128,7 +128,6 @@ func (c *Config) setDefaults() {
 		c.Environment = "development"
 	}
 
-	// Database defaults
 	if strings.TrimSpace(c.Database.Dialect) == "" {
 		c.Database.Dialect = defaultDBDialect
 	}
@@ -142,12 +141,10 @@ func (c *Config) setDefaults() {
 		c.Database.ConnectionLifetime = defaultDBConnLifetime
 	}
 
-	// JWT defaults
 	if c.JWT.Lifespan <= 0 {
 		c.JWT.Lifespan = defaultJWTLifespan
 	}
 
-	// Logging defaults
 	if strings.TrimSpace(c.Logging.Level) == "" {
 		c.Logging.Level = defaultLogLevel
 	}
@@ -155,7 +152,6 @@ func (c *Config) setDefaults() {
 		c.Logging.Format = defaultLogFormat
 	}
 
-	// Redis Cache defaults
 	if c.Redis.Enabled {
 		if c.CacheServices.User.Enabled && c.CacheServices.User.TTL <= 0 {
 			c.CacheServices.User.TTL = defaultUserCacheTTL
@@ -177,7 +173,6 @@ func (c *Config) Validate() error {
 		errs = append(errs, "server.port is required")
 	}
 
-	// Критичные параметры базы данных
 	if strings.TrimSpace(c.Database.Host) == "" {
 		errs = append(errs, "database.host is required")
 	}
@@ -191,14 +186,12 @@ func (c *Config) Validate() error {
 		errs = append(errs, "database.name is required")
 	}
 
-	// Критичные параметры JWT
 	if strings.TrimSpace(c.JWT.Secret) == "" {
 		errs = append(errs, "jwt.secret is required")
 	} else if len(c.JWT.Secret) < 8 {
 		errs = append(errs, "jwt.secret must be at least 8 characters long")
 	}
 
-	// Проверяем Redis только если он включен
 	if c.Redis.Enabled {
 		if strings.TrimSpace(c.Redis.Addr) == "" {
 			errs = append(errs, "redis.addr is required when redis is enabled")

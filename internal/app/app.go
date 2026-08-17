@@ -12,7 +12,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// Container содержит все скомпонованные зависимости приложения.
 type Container struct {
 	Config       *config.Config
 	Logger       *zap.Logger
@@ -21,21 +20,17 @@ type Container struct {
 	Repositories *Repositories
 }
 
-// NewContainer выполняет DI-сборку логгера, БД, Redis и репозиториев.
 func NewContainer(configPath string) (*Container, error) {
-	// 1. Загрузка и валидация конфигурации
 	cfg, err := config.Load(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
 
-	// 2. Инициализация Zap Logger
 	log, err := logger.NewLogger(cfg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to init logger: %w", err)
 	}
 
-	// 3. Подключение к MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		cfg.Database.User,
 		cfg.Database.Password,
@@ -59,7 +54,6 @@ func NewContainer(configPath string) (*Container, error) {
 		return nil, fmt.Errorf("failed to ping db: %w", err)
 	}
 
-	// 4. Подключение к Redis (опционально)
 	var rdb redisclient.Cmdable
 	if cfg.Redis.Enabled {
 		rdb = redisclient.NewClient(&redisclient.Options{
@@ -70,7 +64,6 @@ func NewContainer(configPath string) (*Container, error) {
 		log.Info("redis client initialized", zap.String("addr", cfg.Redis.Addr))
 	}
 
-	// 5. Инициализация репозиториев с кеширующими декораторами
 	repos := NewRepositories(db, rdb, cfg)
 
 	log.Info("application container initialized successfully",
@@ -87,7 +80,6 @@ func NewContainer(configPath string) (*Container, error) {
 	}, nil
 }
 
-// Close корректно закрывает соединения и сбрасывает буферы логгера.
 func (c *Container) Close() {
 	if c.Logger != nil {
 		_ = c.Logger.Sync()
