@@ -8,7 +8,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	repository "github.com/Tantrum4132/task-service/internal/repository"
+	model "github.com/Tantrum4132/task-service/internal/model"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -36,10 +36,10 @@ func (m *MockStatsRepository) EXPECT() *MockStatsRepositoryMockRecorder {
 }
 
 // GetTeamStats mocks base method.
-func (m *MockStatsRepository) GetTeamStats(arg0 context.Context, arg1 int64) (*repository.TeamStats, error) {
+func (m *MockStatsRepository) GetTeamStats(arg0 context.Context, arg1 int64) (*model.TeamStats, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTeamStats", arg0, arg1)
-	ret0, _ := ret[0].(*repository.TeamStats)
+	ret0, _ := ret[0].(*model.TeamStats)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

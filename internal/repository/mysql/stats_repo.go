@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"github.com/Tantrum4132/task-service/internal/model"
 	"github.com/Tantrum4132/task-service/internal/repository"
 
 	"context"
@@ -19,7 +20,7 @@ func NewStatsRepository(db *sql.DB) repository.StatsRepository {
 }
 
 // GetTeamStats возвращает статистику по команде за один CTE-запрос без N+1.
-func (r *statsRepository) GetTeamStats(ctx context.Context, teamID int64) (*repository.TeamStats, error) {
+func (r *statsRepository) GetTeamStats(ctx context.Context, teamID int64) (*model.TeamStats, error) {
 	const query = `
 WITH team_tasks AS (
     SELECT id, status, created_at, closed_at, assignee_id
@@ -110,16 +111,16 @@ CROSS JOIN top_assignees_json taj;
 		return nil, fmt.Errorf("statsRepository.GetTeamStats scan error: %w", err)
 	}
 
-	topAssignees := make([]repository.TopAssignee, 0, 3)
+	topAssignees := make([]model.TopAssignee, 0, 3)
 	if len(rawTopAssignees) > 0 {
 		if err := json.Unmarshal(rawTopAssignees, &topAssignees); err != nil {
 			return nil, fmt.Errorf("statsRepository.GetTeamStats unmarshal top assignees error: %w", err)
 		}
 	}
 
-	stats := &repository.TeamStats{
+	stats := &model.TeamStats{
 		TeamID: teamID,
-		Statuses: repository.TaskStatusStats{
+		Statuses: model.TaskStatusStats{
 			Todo:       todoCount,
 			InProgress: inProgressCount,
 			Done:       doneCount,

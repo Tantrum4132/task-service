@@ -10,7 +10,6 @@ import (
 
 	"github.com/Tantrum4132/task-service/internal/dto"
 	"github.com/Tantrum4132/task-service/internal/model"
-	"github.com/Tantrum4132/task-service/internal/repository"
 	"github.com/Tantrum4132/task-service/internal/service"
 	"github.com/Tantrum4132/task-service/mocks"
 )
@@ -41,13 +40,13 @@ func TestStatsService_GetTeamStats(t *testing.T) {
 
 				statsRepo.EXPECT().
 					GetTeamStats(gomock.Any(), int64(1)).
-					Return(&repository.TeamStats{
-						Statuses: repository.TaskStatusStats{
+					Return(&model.TeamStats{
+						Statuses: model.TaskStatusStats{
 							Todo:       2,
 							InProgress: 3,
 							Done:       5,
 						},
-						TopAssignees: []repository.TopAssignee{
+						TopAssignees: []model.TopAssignee{
 							{UserID: 20, Name: "Alice", ClosedTasks: 5},
 						},
 						AvgCloseTimeHours:  12.5,

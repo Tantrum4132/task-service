@@ -192,7 +192,7 @@ func (r *taskRepository) DeleteTask(ctx context.Context, exec repository.DBEngin
 }
 
 // ListTasks возвращает список задач команды с учетом динамических фильтров
-func (r *taskRepository) ListTasks(ctx context.Context, exec repository.DBEngine, filter repository.TaskFilter) ([]model.Task, error) {
+func (r *taskRepository) ListTasks(ctx context.Context, exec repository.DBEngine, filter model.TaskFilter) ([]model.Task, error) {
 	if filter.TeamID == 0 {
 		return nil, repository.ErrTeamIDRequired
 	}

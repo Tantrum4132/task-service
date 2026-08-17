@@ -80,7 +80,7 @@ func (mr *MockTaskRepositoryMockRecorder) GetTaskByID(arg0, arg1, arg2 interface
 }
 
 // ListTasks mocks base method.
-func (m *MockTaskRepository) ListTasks(arg0 context.Context, arg1 repository.DBEngine, arg2 repository.TaskFilter) ([]model.Task, error) {
+func (m *MockTaskRepository) ListTasks(arg0 context.Context, arg1 repository.DBEngine, arg2 model.TaskFilter) ([]model.Task, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTasks", arg0, arg1, arg2)
 	ret0, _ := ret[0].([]model.Task)

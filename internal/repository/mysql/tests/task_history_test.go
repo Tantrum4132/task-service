@@ -49,7 +49,7 @@ func TestTaskHistoryRepository_Integration(t *testing.T) {
 		assert.Greater(t, history.ID, int64(0))
 
 		// Проверка чтения и валидации замаршаленного/распаршенного JSON
-		items, err := repo.GetHistoryByTaskID(ctx, nil, repository.TaskHistoryFilter{TaskID: taskID})
+		items, err := repo.GetHistoryByTaskID(ctx, nil, model.TaskHistoryFilter{TaskID: taskID})
 		require.NoError(t, err)
 		require.Len(t, items, 1)
 
@@ -96,7 +96,7 @@ func TestTaskHistoryRepository_Integration(t *testing.T) {
 	})
 
 	t.Run("GetHistoryByTaskID - Missing TaskID Error", func(t *testing.T) {
-		_, err := repo.GetHistoryByTaskID(ctx, nil, repository.TaskHistoryFilter{TaskID: 0})
+		_, err := repo.GetHistoryByTaskID(ctx, nil, model.TaskHistoryFilter{TaskID: 0})
 		assert.ErrorIs(t, err, repository.ErrTaskIDRequired)
 	})
 
@@ -116,7 +116,7 @@ func TestTaskHistoryRepository_Integration(t *testing.T) {
 		}
 
 		// Тест 1: Страница 1 (Limit 2, Offset 0)
-		page1, err := repo.GetHistoryByTaskID(ctx, nil, repository.TaskHistoryFilter{
+		page1, err := repo.GetHistoryByTaskID(ctx, nil, model.TaskHistoryFilter{
 			TaskID: newTaskID,
 			Limit:  2,
 			Offset: 0,
@@ -127,7 +127,7 @@ func TestTaskHistoryRepository_Integration(t *testing.T) {
 		assert.Greater(t, page1[0].ID, page1[1].ID)
 
 		// Тест 2: Страница 2 (Limit 2, Offset 2)
-		page2, err := repo.GetHistoryByTaskID(ctx, nil, repository.TaskHistoryFilter{
+		page2, err := repo.GetHistoryByTaskID(ctx, nil, model.TaskHistoryFilter{
 			TaskID: newTaskID,
 			Limit:  2,
 			Offset: 2,
@@ -159,12 +159,12 @@ func TestTaskHistoryRepository_Integration(t *testing.T) {
 		require.NoError(t, err)
 
 		// Чтение внутри транзакции (должно видеть несовершенную запись)
-		txItems, err := repo.GetHistoryByTaskID(ctx, tx, repository.TaskHistoryFilter{TaskID: txTaskID})
+		txItems, err := repo.GetHistoryByTaskID(ctx, tx, model.TaskHistoryFilter{TaskID: txTaskID})
 		require.NoError(t, err)
 		require.Len(t, txItems, 1)
 
 		// Чтение вне транзакции (до Commit не должно видеть запись)
-		nonTxItems, err := repo.GetHistoryByTaskID(ctx, nil, repository.TaskHistoryFilter{TaskID: txTaskID})
+		nonTxItems, err := repo.GetHistoryByTaskID(ctx, nil, model.TaskHistoryFilter{TaskID: txTaskID})
 		require.NoError(t, err)
 		assert.Empty(t, nonTxItems)
 
@@ -172,7 +172,7 @@ func TestTaskHistoryRepository_Integration(t *testing.T) {
 		require.NoError(t, tx.Commit())
 
 		// Чтение вне транзакции после Commit
-		postCommitItems, err := repo.GetHistoryByTaskID(ctx, nil, repository.TaskHistoryFilter{TaskID: txTaskID})
+		postCommitItems, err := repo.GetHistoryByTaskID(ctx, nil, model.TaskHistoryFilter{TaskID: txTaskID})
 		require.NoError(t, err)
 		require.Len(t, postCommitItems, 1)
 	})

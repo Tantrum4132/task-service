@@ -241,7 +241,7 @@ func TestTaskRepository_Integration(t *testing.T) {
 
 		// 1. Фильтр по статусу 'todo'
 		todoStatus := model.TaskStatusTodo
-		tasks, err := repo.ListTasks(ctx, nil, repository.TaskFilter{
+		tasks, err := repo.ListTasks(ctx, nil, model.TaskFilter{
 			TeamID: newTeamID,
 			Status: &todoStatus,
 		})
@@ -249,7 +249,7 @@ func TestTaskRepository_Integration(t *testing.T) {
 		assert.Len(t, tasks, 2)
 
 		// 2. Фильтр по AssigneeID
-		tasks, err = repo.ListTasks(ctx, nil, repository.TaskFilter{
+		tasks, err = repo.ListTasks(ctx, nil, model.TaskFilter{
 			TeamID:     newTeamID,
 			AssigneeID: &assigneeID,
 		})
@@ -257,7 +257,7 @@ func TestTaskRepository_Integration(t *testing.T) {
 		assert.Len(t, tasks, 2)
 
 		// 3. Пагинация (Limit 1, Offset 0)
-		tasks, err = repo.ListTasks(ctx, nil, repository.TaskFilter{
+		tasks, err = repo.ListTasks(ctx, nil, model.TaskFilter{
 			TeamID: newTeamID,
 			Limit:  1,
 			Offset: 0,

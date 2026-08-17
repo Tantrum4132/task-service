@@ -51,7 +51,7 @@ func (mr *MockTaskHistoryRepositoryMockRecorder) CreateTaskHistory(arg0, arg1, a
 }
 
 // GetHistoryByTaskID mocks base method.
-func (m *MockTaskHistoryRepository) GetHistoryByTaskID(arg0 context.Context, arg1 repository.DBEngine, arg2 repository.TaskHistoryFilter) ([]model.TaskHistory, error) {
+func (m *MockTaskHistoryRepository) GetHistoryByTaskID(arg0 context.Context, arg1 repository.DBEngine, arg2 model.TaskHistoryFilter) ([]model.TaskHistory, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetHistoryByTaskID", arg0, arg1, arg2)
 	ret0, _ := ret[0].([]model.TaskHistory)

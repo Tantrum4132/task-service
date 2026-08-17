@@ -70,7 +70,7 @@ func (r *taskHistoryRepository) CreateTaskHistory(ctx context.Context, exec repo
 }
 
 // GetHistoryByTaskID возвращает историю изменений конкретной задачи с поддержкой детерминированной пагинации
-func (r *taskHistoryRepository) GetHistoryByTaskID(ctx context.Context, exec repository.DBEngine, filter repository.TaskHistoryFilter) ([]model.TaskHistory, error) {
+func (r *taskHistoryRepository) GetHistoryByTaskID(ctx context.Context, exec repository.DBEngine, filter model.TaskHistoryFilter) ([]model.TaskHistory, error) {
 	if filter.TaskID == 0 {
 		return nil, repository.ErrTaskIDRequired
 	}

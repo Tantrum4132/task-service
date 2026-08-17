@@ -77,7 +77,7 @@ func (m *mockTaskRepository) DeleteTask(ctx context.Context, exec repository.DBE
 	return nil
 }
 
-func (m *mockTaskRepository) ListTasks(ctx context.Context, exec repository.DBEngine, filter repository.TaskFilter) ([]model.Task, error) {
+func (m *mockTaskRepository) ListTasks(ctx context.Context, exec repository.DBEngine, filter model.TaskFilter) ([]model.Task, error) {
 	m.listCount++
 	res := make([]model.Task, 0)
 	for _, t := range m.tasks {
@@ -124,7 +124,7 @@ func TestTaskCacheDecorator_Integration(t *testing.T) {
 		decorator := cache.NewTaskCacheDecorator(mockRepo, rdb, 5*time.Minute)
 
 		teamID := int64(10)
-		filter := repository.TaskFilter{TeamID: teamID, Limit: 10}
+		filter := model.TaskFilter{TeamID: teamID, Limit: 10}
 
 		// 1. Первый запрос — Cache Miss, идет обращение к базовому репозиторию
 		tasks, err := decorator.ListTasks(ctx, nil, filter)
@@ -144,7 +144,7 @@ func TestTaskCacheDecorator_Integration(t *testing.T) {
 		decorator := cache.NewTaskCacheDecorator(mockRepo, rdb, 5*time.Minute)
 
 		teamID := int64(20)
-		filter := repository.TaskFilter{TeamID: teamID}
+		filter := model.TaskFilter{TeamID: teamID}
 
 		// Нагреваем кеш
 		_, err := decorator.ListTasks(ctx, nil, filter)
@@ -172,7 +172,7 @@ func TestTaskCacheDecorator_Integration(t *testing.T) {
 		decorator := cache.NewTaskCacheDecorator(mockRepo, rdb, 5*time.Minute)
 
 		teamID := int64(30)
-		filter := repository.TaskFilter{TeamID: teamID}
+		filter := model.TaskFilter{TeamID: teamID}
 
 		task := &model.Task{TeamID: teamID, Title: "Initial", Status: model.TaskStatusTodo}
 		require.NoError(t, decorator.CreateTask(ctx, nil, task))
@@ -203,7 +203,7 @@ func TestTaskCacheDecorator_Integration(t *testing.T) {
 		decorator := cache.NewTaskCacheDecorator(mockRepo, rdb, 5*time.Minute)
 
 		teamID := int64(40)
-		filter := repository.TaskFilter{TeamID: teamID}
+		filter := model.TaskFilter{TeamID: teamID}
 
 		// Прогрев кеша
 		_, err := decorator.ListTasks(ctx, nil, filter)

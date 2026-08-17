@@ -153,7 +153,7 @@ func (s *taskService) ListTasks(ctx context.Context, userID int64, req dto.TaskF
 		return nil, ErrPermissionDenied
 	}
 
-	filter := repository.TaskFilter{
+	filter := model.TaskFilter{
 		TeamID:     req.TeamID,
 		AssigneeID: req.AssigneeID,
 		Limit:      req.Limit,
@@ -336,7 +336,7 @@ func (s *taskService) GetTaskHistory(ctx context.Context, userID, taskID int64, 
 		return nil, err
 	}
 
-	filter := repository.TaskHistoryFilter{TaskID: taskID, Limit: limit, Offset: offset}
+	filter := model.TaskHistoryFilter{TaskID: taskID, Limit: limit, Offset: offset}
 	histories, err := s.taskHistoryRepo.GetHistoryByTaskID(ctx, nil, filter)
 	if err != nil {
 		return nil, err

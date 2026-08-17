@@ -50,7 +50,7 @@ type TaskCommentRepository interface {
 //go:generate mockgen -destination=../../mocks/task_history_repository_mock.go -package=mocks github.com/Tantrum4132/task-service/internal/repository TaskHistoryRepository
 type TaskHistoryRepository interface {
 	CreateTaskHistory(ctx context.Context, exec DBEngine, history *model.TaskHistory) error
-	GetHistoryByTaskID(ctx context.Context, exec DBEngine, filter TaskHistoryFilter) ([]model.TaskHistory, error)
+	GetHistoryByTaskID(ctx context.Context, exec DBEngine, filter model.TaskHistoryFilter) ([]model.TaskHistory, error)
 }
 
 // TeamMemberRepository — интерфейс работы с таблицей team_members
@@ -94,52 +94,12 @@ type TaskRepository interface {
 	GetTaskByID(ctx context.Context, exec DBEngine, id int64) (*model.Task, error)
 	UpdateTask(ctx context.Context, exec DBEngine, task *model.Task) error
 	DeleteTask(ctx context.Context, exec DBEngine, id int64) error
-	ListTasks(ctx context.Context, exec DBEngine, filter TaskFilter) ([]model.Task, error)
+	ListTasks(ctx context.Context, exec DBEngine, filter model.TaskFilter) ([]model.Task, error)
 }
 
 // StatsRepository декларирует интерфейс для работы с аналитикой.
 //
 //go:generate mockgen -destination=../../mocks/stat_repository_mock.go -package=mocks github.com/Tantrum4132/task-service/internal/repository StatsRepository
 type StatsRepository interface {
-	GetTeamStats(ctx context.Context, teamID int64) (*TeamStats, error)
-}
-
-// TaskHistoryFilter содержит параметры фильтрации и пагинации истории задач
-type TaskHistoryFilter struct {
-	TaskID int64
-	Limit  int
-	Offset int
-}
-
-// TaskFilter содержит параметры фильтрации для получения списка задач
-type TaskFilter struct {
-	TeamID     int64
-	Status     *model.TaskStatus
-	AssigneeID *int64
-	Limit      int
-	Offset     int
-}
-
-// TaskStatusStats содержит агрегированное количество задач по статусам.
-type TaskStatusStats struct {
-	Todo       int64 `json:"todo"`
-	InProgress int64 `json:"in_progress"`
-	Done       int64 `json:"done"`
-}
-
-// TopAssignee представляет топ-исполнителя по закрытым задачам за последние 30 дней.
-type TopAssignee struct {
-	UserID      int64  `json:"user_id"`
-	Name        string `json:"name"`
-	Email       string `json:"email"`
-	ClosedTasks int64  `json:"closed_tasks"`
-}
-
-// TeamStats объединяет все требуемые по ТЗ метрики отчета по команде.
-type TeamStats struct {
-	TeamID             int64           `json:"team_id"`
-	Statuses           TaskStatusStats `json:"statuses"`
-	AvgCloseTimeHours  float64         `json:"avg_close_time_hours"`
-	TotalCommentsCount int64           `json:"total_comments_count"`
-	TopAssignees       []TopAssignee   `json:"top_assignees"`
+	GetTeamStats(ctx context.Context, teamID int64) (*model.TeamStats, error)
 }

@@ -86,7 +86,7 @@ func (d *TaskCacheDecorator) DeleteTask(ctx context.Context, exec repository.DBE
 	return nil
 }
 
-func (d *TaskCacheDecorator) ListTasks(ctx context.Context, exec repository.DBEngine, filter repository.TaskFilter) ([]model.Task, error) {
+func (d *TaskCacheDecorator) ListTasks(ctx context.Context, exec repository.DBEngine, filter model.TaskFilter) ([]model.Task, error) {
 	if filter.TeamID == 0 {
 		return nil, repository.ErrTeamIDRequired
 	}
@@ -151,7 +151,7 @@ func (d *TaskCacheDecorator) InvalidateTeamCache(ctx context.Context, teamID int
 	return nil
 }
 
-func buildTaskFilterCacheKey(filter repository.TaskFilter) string {
+func buildTaskFilterCacheKey(filter model.TaskFilter) string {
 	statusVal := ""
 	if filter.Status != nil {
 		statusVal = string(*filter.Status)
